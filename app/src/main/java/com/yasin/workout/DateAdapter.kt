@@ -8,6 +8,7 @@ import com.yasin.workout.databinding.ItemsHistoryBinding
 
 class ItemAdapter(
     private val items: ArrayList<DateEntity>,
+    private val deleteListener: (id: Int) -> Unit
 ) :
     RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
@@ -15,6 +16,7 @@ class ItemAdapter(
         val llMain = binding.llMain
         val tvDate = binding.tvDate
         val tvID = binding.tvID
+        val ivDelete = binding.ivDelete
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemsHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -38,6 +40,10 @@ class ItemAdapter(
         else{
             holder.llMain.setBackgroundColor(ContextCompat.getColor(holder.itemView.context,
                 R.color.white))
+        }
+
+        holder.ivDelete.setOnClickListener{
+            deleteListener.invoke(item.id)
         }
     }
 }

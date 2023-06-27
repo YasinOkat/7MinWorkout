@@ -4,16 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.yasin.workout.databinding.ActivityCalorieNeedBinding
-import java.math.BigDecimal
-import java.math.RoundingMode
-import kotlin.math.log10
-
 class CalorieNeedActivity : AppCompatActivity() {
 
     private var binding : ActivityCalorieNeedBinding? = null

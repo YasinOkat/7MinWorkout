@@ -1,5 +1,6 @@
 package com.yasin.workout
 
+import android.app.AlertDialog
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -40,13 +41,19 @@ class HistoryActivity : AppCompatActivity() {
             val list = ArrayList(it)
             setupListOfDataIntoRecyclerView(list, dateDao)
         } }
+
+
     }
 
     private fun setupListOfDataIntoRecyclerView(
-        employeesList:ArrayList<DateEntity>,
-        employeeDao: DateDao){
-        if(employeesList.isNotEmpty()){
-            val itemAdapter = ItemAdapter(employeesList)
+        dateList:ArrayList<DateEntity>,
+        dateDao: DateDao){
+        if(dateList.isNotEmpty()){
+            val itemAdapter = ItemAdapter(dateList
+            ) { deleteId ->
+                deleteRecordAlertDialog(deleteId, dateDao)
+            }
+
             binding?.rvHistory?.layoutManager = LinearLayoutManager(this)
             binding?.rvHistory?.adapter = itemAdapter
             binding?.rvHistory?.visibility = View.VISIBLE
@@ -63,5 +70,24 @@ class HistoryActivity : AppCompatActivity() {
             val current = LocalDateTime.now().format(formatter)
             dateDao.insert(DateEntity(date = current.toString()))
         }
+    }
+
+    private fun deleteRecordAlertDialog(id: Int, dateDao: DateDao){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Delete record")
+        builder.setPositiveButton("Yes"){dialogInterface, _->
+            lifecycleScope.launch {
+                dateDao.delete(DateEntity(id))
+                Toast.makeText(applicationContext, "Record deleted", Toast.LENGTH_LONG).show()
+            }
+            dialogInterface.dismiss()
+        }
+        builder.setNegativeButton("No"){dialogInterface, _->
+            dialogInterface.dismiss()
+        }
+
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
     }
 }
